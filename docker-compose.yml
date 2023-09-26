@@ -39,7 +39,7 @@ services:
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -58,7 +58,7 @@ services:
     ports:
       - "12201:12201/udp"
     environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      LS_JAVA_OPTS: "-Xmx128m -Xms128m"
     depends_on:
       - elasticsearch
     networks:

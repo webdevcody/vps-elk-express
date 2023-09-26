@@ -1,0 +1,3 @@
+elk-example.webdevcody.com {
+  reverse_proxy express-server:3000
+}

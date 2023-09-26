@@ -1,0 +1,79 @@
+version: "3"
+
+services:
+  express-server:
+    build: ./server
+    container_name: express-server
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - elk-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://127.0.0.1:12201"
+    depends_on:
+      - logstash
+    restart: always
+
+  caddy:
+    image: caddy/caddy:latest
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - elk-network
+    depends_on:
+      - express-server
+    restart: always
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - elk-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.17.13
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+      - "12201:12201/udp"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.13
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    networks:
+      - elk-network
+    volumes:
+      - ./kibana/config/:/usr/share/kibana/config:ro
+    depends_on:
+      - logstash
+      - elasticsearch
+
+networks:
+  elk-network:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:

@@ -45,6 +45,10 @@ services:
       - "9300:9300"
     networks:
       - elk-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   logstash:
     image: docker.elastic.co/logstash/logstash:7.17.13
@@ -59,6 +63,10 @@ services:
       - elasticsearch
     networks:
       - elk-network
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.17.13

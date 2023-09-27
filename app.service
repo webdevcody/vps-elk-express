@@ -1,0 +1,15 @@
+[Unit]
+Description=Docker Compose Your Service Name
+Requires=snap.docker.dockerd.service
+After=snap.docker.dockerd.service
+
+[Service]
+WorkingDirectory=/root/vps-elk-express
+ExecStart=/usr/local/bin/docker-compose -f docker-compose.yml up -d
+ExecStop=/usr/local/bin/docker-compose -f docker-compose.yml down
+TimeoutStartSec=0
+Restart=always
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target

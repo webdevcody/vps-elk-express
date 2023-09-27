@@ -39,7 +39,7 @@ services:
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -48,7 +48,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 1024M
 
   logstash:
     image: docker.elastic.co/logstash/logstash:7.17.13
@@ -58,7 +58,7 @@ services:
     ports:
       - "12201:12201/udp"
     environment:
-      LS_JAVA_OPTS: "-Xmx128m -Xms128m"
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     depends_on:
       - elasticsearch
     networks:
@@ -66,7 +66,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 512M
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.17.13

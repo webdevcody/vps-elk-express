@@ -5,11 +5,11 @@ After=snap.docker.dockerd.service
 
 [Service]
 WorkingDirectory=/root/vps-elk-express
-ExecStart=/usr/local/bin/docker-compose -f docker-compose.yml up -d
-ExecStop=/usr/local/bin/docker-compose -f docker-compose.yml down
-TimeoutStartSec=0
-Restart=always
-RestartSec=30s
+ExecStart=/snap/bin/docker-compose -f /root/vps-elk-express/docker-compose.yml up -d
+ExecStop=/snap/bin/docker-compose -f /root/vps-elk-express/docker-compose.yml down
+Type=oneshot
+RemainAfterExit=true
+StandardOutput=syslog
 
 [Install]
 WantedBy=multi-user.target

@@ -90,6 +90,18 @@ services:
     ports:
       - "8080:8080"
 
+  postgres:
+    image: postgres:latest
+    container_name: my-postgres-db
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
 networks:
   elk-network:
     driver: bridge
@@ -97,3 +109,4 @@ networks:
 volumes:
   caddy_data:
   caddy_config:
+  pg_data:
